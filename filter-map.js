@@ -1,0 +1,128 @@
+const data = [
+  {
+    time: "17:34",
+    precipIntensity: 0,
+    precipProbability: 0,
+    temperature: 18.08,
+    apparentTemperature: 18.08,
+    dewPoint: 12.47,
+    humidity: 0.7,
+    windSpeed: 11.2,
+    windBearing: 57,
+    visibility: 16.11,
+    cloudCover: 0.75,
+    pressure: 1013.3,
+  },
+  {
+    time: "12:34",
+    precipIntensity: 0,
+    precipProbability: 0,
+    temperature: 19.09,
+    apparentTemperature: 19.09,
+    dewPoint: 11.96,
+    humidity: 0.63,
+    windSpeed: 14.13,
+    windBearing: 50,
+    visibility: 17.14,
+    cloudCover: 0.31,
+    pressure: 1018.1,
+  },
+  {
+    time: "18:34",
+    precipIntensity: 0,
+    precipProbability: 0,
+    temperature: 19.75,
+    apparentTemperature: 19.75,
+    dewPoint: 12.55,
+    humidity: 0.63,
+    windSpeed: 13.58,
+    windBearing: 64,
+    visibility: 18.05,
+    cloudCover: 0.31,
+    pressure: 1015.96,
+  },
+  {
+    time: "11:14",
+    precipIntensity: 0,
+    precipProbability: 0,
+    temperature: 21.32,
+    apparentTemperature: 21.32,
+    dewPoint: 12.39,
+    humidity: 0.57,
+    windSpeed: 15.35,
+    windBearing: 87,
+    visibility: 19.05,
+    cloudCover: 0.29,
+    pressure: 1014.63,
+  },
+  {
+    time: "22:38",
+    precipIntensity: 0,
+    precipProbability: 0,
+    temperature: 22.46,
+    apparentTemperature: 22.46,
+    dewPoint: 13.09,
+    humidity: 0.55,
+    windSpeed: 13.26,
+    windBearing: 83,
+    visibility: 16.45,
+    cloudCover: 0.25,
+    pressure: 1020.76,
+  },
+  {
+    time: "04:34",
+    precipIntensity: 0,
+    precipProbability: 0,
+    temperature: 22.72,
+    apparentTemperature: 22.72,
+    dewPoint: 13.09,
+    humidity: 0.55,
+    windSpeed: 11.39,
+    windBearing: 79,
+    visibility: 16.44,
+    cloudCover: 0.29,
+    pressure: 1017.57,
+  },
+  {
+    time: "02:10",
+    precipIntensity: 0,
+    precipProbability: 0,
+    temperature: 22.79,
+    apparentTemperature: 22.79,
+    dewPoint: 13.17,
+    humidity: 0.55,
+    windSpeed: 12.75,
+    windBearing: 85,
+    visibility: 16.25,
+    cloudCover: 0.61,
+    pressure: 1011.28,
+  },
+  {
+    time: "08:34",
+    precipIntensity: 0.1803,
+    precipProbability: 0.54,
+    precipType: "rain",
+    temperature: 13.26,
+    apparentTemperature: 13.26,
+    dewPoint: 12.16,
+    humidity: 0.93,
+    windSpeed: 9.88,
+    windBearing: 20,
+    visibility: 16.35,
+    pressure: 1000.53,
+  },
+];
+
+//conspole the temperature and time in case pressure higher than 1015 and humidity higher than 0.55
+data
+  .filter((day) => {
+    if (day.pressure > 1015) {
+      return true;
+    }
+    return false;
+  })
+  .map((day) => {
+    if (day.humidity > 0.55) {
+      console.log("temperature:", day.temperature, "Time:", day.time);
+    }
+  });

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Debouncing</title>
+    <meta name="viewport" content="width=device-width" />
+    <style>
+      html {
+        font-size: 20px;
+        font-family: "Monserrat", sans-serif;
+        line-height: 1.7;
+      }
+      .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-flow: column wrap;
+      }
+      input {
+        margin: auto;
+        width: 200px;
+        margin: 2px 2px;
+        padding: 5px 5px;
+        border: 3px solid green;
+      }
+
+      ul {
+        padding-left: 5px;
+      }
+      li {
+        background: #cce5ff;
+        display: block;
+        text-align: center;
+        width: 200px;
+        margin: 2px 2px;
+        padding: 2px 5px;
+      }
+    </style>
+  </head>
+  <body class="container">
+    <h1>Debouncing</h1>
+    <form>
+      <input title="Enter text for searshing" type="search" id="txt-search" />
+    </form>
+
+    <p id="output"></p>
+    <ul id="matches"></ul>
+
+    <h3 class="formBox">Full List</h3>
+    <pre>
+bread, rolls, cakes, cookies, pies, cinnamon roll, hamburger, hot dog, Chips, crisps', corn snacks, Avocados</pre
+    >
+
+    <script>
+      const KEY = "debounce-terms";
+
+      let init = function () {
+        document
+          .getElementById("txt-search")
+          .addEventListener("input", efficientSearch);
+
+        let terms = [
+          "bread",
+          "rolls",
+          "cakes",
+          "cookies",
+          "pies",
+          "cinnamon roll",
+          "hamburger",
+          "hot dog",
+          "dog",
+          "Chips",
+          "crisps",
+          "corn snacks",
+          "Avocados",
+        ];
+        localStorage.setItem(KEY, JSON.stringify(terms));
+      };
+
+      let search = function (ev) {
+        let text = ev.target.value;
+        document.getElementById("output").textContent = `List Matching ${text}`;
+        let ul = document.getElementById("matches");
+
+        //asynchronous search to match what has been typed
+        getList(text)
+          .then((list) => {
+            ul.innerHTML = "";
+            if (list.length == 0) {
+              let li = document.createElement("li");
+              li.textContent = "NO MATCHES";
+              ul.appendChild(li);
+            } else {
+              list.forEach((item) => {
+                let li = document.createElement("li");
+                li.textContent = item;
+
+                ul.appendChild(li);
+              });
+            }
+          })
+          .catch((err) => console.warn(err));
+      };
+
+      let getList = function (txt) {
+        return new Promise((resolve, reject) => {
+          //use setTimeout with random value to show what can happen
+          let r = Math.floor(Math.random() * 1000);
+          setTimeout(
+            function () {
+              let t = "^" + this.toString();
+              let pattern = new RegExp(t, "i"); //starts with t
+              let terms = JSON.parse(localStorage.getItem(KEY));
+              let matches = terms.filter((term) => pattern.test(term));
+              console.log("matches", matches);
+              resolve(matches);
+            }.bind(txt),
+            r
+          );
+        });
+      };
+
+      let debounce = function (func, wait, immediate) {
+        var timeout;
+        return function () {
+          var context = this,
+            args = arguments;
+          var later = function () {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+          };
+          var callNow = immediate && !timeout;
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+          if (callNow) func.apply(context, args);
+        };
+      };
+
+      let efficientSearch = debounce(function (ev) {
+        let text = ev.target.value;
+        document.getElementById("output").textContent = `List Matching ${text}`;
+        let ul = document.getElementById("matches");
+
+        //asynchronous search to match what has been typed
+        getList(text)
+          .then((list) => {
+            ul.innerHTML = "";
+            if (list.length == 0) {
+              let li = document.createElement("li");
+              li.textContent = "NO MATCHES";
+
+              ul.appendChild(li);
+            } else {
+              list.forEach((item) => {
+                let li = document.createElement("li");
+                li.textContent = item;
+                li.classList.add("legend");
+                ul.appendChild(li);
+              });
+            }
+          })
+          .catch((err) => console.warn(err));
+      }, 200);
+      //call the debounced function every 200ms
+
+      document.addEventListener("DOMContentLoaded", init);
+      //debounce function - David Walsh from underscore.js
+    </script>
+  </body>
+</html>
